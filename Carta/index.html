@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un secreto para ti 💜</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     CONFIGURACIÓN RÁPIDA DE COLORES (variables CSS)
+     Cambia estos valores para ajustar la paleta completa.
+  ============================================================ */
+  :root{
+    --rosa-pastel:#e3d0ff;
+    --rosa-oscuro:#9b5de5;
+    --vino:#4b1f87;
+    --vino-oscuro:#1e0b3a;
+    --blanco:#fbf7ff;
+    --crema:#f3e8ff;
+    --dorado:#d9b8ff;
+    --texto-carta:#3a2257;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; width:100%; min-height:100%;
+    background:var(--vino-oscuro);
+    font-family:'Quicksand', sans-serif;
+    overflow-x:hidden;
+    color:var(--blanco);
+  }
+
+  .oculto{ display:none !important; }
+  button{ cursor:pointer; font-family:inherit; border:none; }
+
+  #pantalla-password{
+    position:fixed; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(155,93,229,0.35), transparent 55%),
+      radial-gradient(ellipse at 75% 80%, rgba(75,31,135,0.55), transparent 55%),
+      linear-gradient(160deg, var(--vino-oscuro), #170730 60%, #10041f);
+    z-index:10; text-align:center; padding:20px; transition:opacity 1s ease, transform 1s ease;
+  }
+
+  .cielo{ position:fixed; inset:0; pointer-events: none; z-index: 1; }
+  .estrella{
+    position:absolute; width:3px; height:3px; border-radius:50%;
+    background:var(--dorado);
+    box-shadow:0 0 6px 1px rgba(217,184,255,0.9);
+    animation:centellear 3s ease-in-out infinite;
+  }
+  @keyframes centellear{
+    0%,100%{ opacity:.25; transform:scale(1); }
+    50%{ opacity:1; transform:scale(1.4); }
+  }
+
+  .corazon-flotante{
+    position:absolute; bottom:-40px; font-size:22px;
+    animation-name:flotar; animation-timing-function:linear; animation-iteration-count:infinite;
+    opacity:.6; filter: blur(.3px);
+  }
+  @keyframes flotar{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.7; }
+    90%{ opacity:.5; }
+    100%{ transform:translateY(-110vh) translateX(var(--drift,20px)) rotate(360deg); opacity:0; }
+  }
+
+  .contenido-password{ position:relative; z-index:2; max-width:480px; }
+
+  #corazon-central{
+    font-size:clamp(90px,18vw,150px);
+    display:inline-block;
+    animation: latir 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(155,93,229,0.65));
+    transition: transform .5s ease;
+    user-select:none;
+  }
+  @keyframes latir{
+    0%,100%{ transform:scale(1); }
+    15%{ transform:scale(1.12); }
+    30%{ transform:scale(0.97); }
+    45%{ transform:scale(1.08); }
+    60%{ transform:scale(1); }
+  }
+  #corazon-central.temblando{ animation: temblar .45s ease; }
+  @keyframes temblar{
+    0%,100%{ transform:translateX(0) scale(1); }
+    20%{ transform:translateX(-14px) scale(0.98); }
+    40%{ transform:translateX(12px) scale(0.98); }
+    60%{ transform:translateX(-8px) scale(0.98); }
+    80%{ transform:translateX(6px) scale(0.98); }
+  }
+  #corazon-central.aceptado{ animation:none; transform:scale(1.35); }
+
+  .titulo-secreto{
+    font-family:'Great Vibes', cursive;
+    font-size:clamp(30px,6.5vw,46px);
+    margin: 10px 0 4px;
+    background:linear-gradient(90deg,#e3d0ff,#ffffff,#c9a7ff,#f3e8ff,#e3d0ff);
+    background-size:250% 100%;
+    -webkit-background-clip:text; background-clip:text;
+    color:transparent; -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 14px rgba(190,140,255,0.55));
+    animation:brillo-titulo 6s linear infinite;
+  }
+  @keyframes brillo-titulo{ 0%{background-position:0% 50%;} 100%{background-position:250% 50%;} }
+  .subtitulo-secreto{
+    font-size: 15px; letter-spacing:.4px; color: #eadbff; opacity:.85; margin-bottom: 22px;
+    font-weight:500;
+  }
+
+  .fila-password{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:14px;
+  }
+  #input-password{
+    background:rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(227,208,255,0.4);
+    color:var(--blanco);
+    padding: 13px 18px;
+    border-radius:30px;
+    font-size:16px;
+    text-align:center;
+    letter-spacing: 1px;
+    width: 230px;
+    max-width:70vw;
+    backdrop-filter:blur(6px);
+    outline:none;
+    transition:border-color .3s, box-shadow .3s;
+  }
+  #input-password:focus{
+    border-color:var(--rosa-oscuro);
+    box-shadow:0 0 0 4px rgba(155,93,229,0.25);
+  }
+  #input-password::placeholder{ color:rgba(251,247,255,0.5); }
+
+  #btn-abrir-corazon{
+    background:linear-gradient(135deg, var(--rosa-oscuro), #7b3fc4);
+    color:var(--blanco);
+    padding: 13px 26px;
+    border-radius:30px;
+    font-size:15px;
+    font-weight:600;
+    box-shadow:0 6px 20px rgba(155,93,229,0.45);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  #btn-abrir-corazon:hover{ transform:translateY(-2px) scale(1.03); box-shadow:0 10px 26px rgba(155,93,229,0.6); }
+  #btn-abrir-corazon:active{ transform:translateY(0) scale(0.98); }
+
+  #mensaje-error{
+    margin-top: 16px; min-height: 20px; font-size: 14px; color:#eadbff;
+    opacity:0; transition:opacity .3s ease;
+  }
+  #mensaje-error.mostrar{ opacity:1; }
+
+  #pantalla-password.desvanecer{ opacity:0; transform:scale(1.05); pointer-events:none; }
+
+  .explosion-corazon{
+    position: fixed; font-size: 20px; z-index: 20; pointer-events: none;
+    animation: explotar 1.1s ease-out forwards;
+  }
+  @keyframes explotar{
+    0%{ transform:translate(0,0) scale(0.4); opacity:1; }
+    100%{ transform:translate(var(--ex,0), var(--ey,0)) scale(1.2); opacity:0; }
+  }
+
+  #escena-carta{
+    position:fixed; inset:0; z-index: 5;
+    display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(155,93,229,0.25), transparent 60%),
+      linear-gradient(170deg, #2a1050, var(--vino-oscuro) 55%, #0e0420);
+    opacity:0; transition:opacity 1s ease;
+  }
+  #escena-carta.visible{ opacity:1; }
+
+  #lluvia-contenedor{
+    position:fixed; inset:0; z-index:3; overflow:hidden; pointer-events:none;
+  }
+  .te-amo-item{
+    position:absolute; top:-60px; white-space:nowrap;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:600;
+    color:var(--rosa-pastel);
+    animation-name:caer; animation-timing-function:linear; animation-iteration-count:infinite;
+    pointer-events:auto; cursor:pointer; user-select:none;
+    transition:transform .2s ease;
+  }
+  .te-amo-item:hover{ transform:scale(1.08); }
+  @keyframes caer{
+    0%{ transform:translateY(-10vh) translateX(0) rotate(var(--rot,0deg)); }
+    100%{ transform:translateY(115vh) translateX(var(--drift,0px)) rotate(var(--rot,0deg)); }
+  }
+  .te-amo-item.congelado{ animation-play-state:paused !important; }
+  .te-amo-item.creciendo{
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1), opacity .8s ease;
+    transform:scale(2.4) !important;
+    opacity:0 !important;
+  }
+
+  .mini-te-amo{
+    position: fixed; z-index: 21; pointer-events: none;
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:600;
+    color:var(--dorado); font-size:15px;
+    animation:mini-flotar 1.8s ease-out forwards;
+  }
+  @keyframes mini-flotar{
+    0%{ transform:translate(0,0) scale(0.3); opacity:0; }
+    15%{ opacity:1; }
+    100%{ transform:translate(var(--mx,0), var(--my,-40px)) scale(1); opacity:0; }
+  }
+
+  .frase-flotante-click{
+    position: fixed; z-index: 22; pointer-events: none;
+    font-family:'Great Vibes', cursive; font-size:22px; color:var(--blanco);
+    text-shadow:0 0 12px rgba(155,93,229,0.8);
+    animation:frase-aparecer 2.6s ease-out forwards;
+    text-align:center; max-width:280px;
+  }
+  @keyframes frase-aparecer{
+    0%{ opacity:0; transform:translate(-50%,-40%) scale(0.7); }
+    15%{ opacity:1; transform:translate(-50%,-60%) scale(1); }
+    80%{ opacity:1; }
+    100%{ opacity:0; transform:translate(-50%,-90%) scale(1.05); }
+  }
+
+  #sobre{
+    position:relative; z-index:4;
+    width: min(260px, 70vw); aspect-ratio:1.45/1;
+    cursor:pointer;
+    filter:drop-shadow(0 15px 35px rgba(0,0,0,0.5));
+    transition:transform .4s ease;
+  }
+  #sobre:hover{ transform:translateY(-6px) scale(1.02); }
+  .sobre-cuerpo{
+    position:absolute; inset:0;
+    background:linear-gradient(160deg, var(--crema), #e6d3fa);
+    border-radius:8px;
+    box-shadow:inset 0 0 0 2px rgba(217,184,255,0.5);
+  }
+  .sobre-solapa{
+    position:absolute; top:0; left:0; width:100%; height:55%;
+    background:linear-gradient(160deg, var(--rosa-oscuro), #7b3fc4);
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
+    transform-origin:top;
+    transition:transform .7s cubic-bezier(.6,-0.2,.35,1.3);
+    z-index:3;
+  }
+  #sobre.abierto .sobre-solapa{ transform:rotateX(160deg); }
+  .sobre-sello{
+    position:absolute; top:53%; left:50%; transform:translate(-50%,-50%);
+    font-size:28px; z-index:4; filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
+  }
+  .sobre-etiqueta{
+    position:absolute; bottom:16%; left:50%; transform:translate(-50%,0);
+    font-family:'Great Vibes', cursive; font-size:20px; color:var(--vino);
+  }
+
+  #texto-clic-sobre{
+    position:absolute; bottom:-46px; left:50%; transform:translateX(-50%);
+    white-space:nowrap; font-size:14px; color:var(--rosa-pastel); opacity:.85;
+    animation:pulso-suave 2s ease-in-out infinite;
+  }
+  @keyframes pulso-suave{ 0%,100%{opacity:.6;} 50%{opacity:1;} }
+
+  #carta-wrapper{
+    position:fixed; inset:0; z-index: 8;
+    display:flex; align-items:center; justify-content:center;
+    padding: 24px;
+    opacity:0; pointer-events:none;
+    transition:opacity .6s ease;
+  }
+  #carta-wrapper.visible{ opacity:1; pointer-events:auto; }
+
+  #carta{
+    position:relative;
+    width: min(520px, 92vw);
+    max-height:88vh;
+    overflow-y:auto;
+    background:linear-gradient(170deg, var(--blanco), var(--crema));
+    border-radius:14px;
+    padding: clamp(28px,5vw,48px) clamp(24px,5vw,44px);
+    box-shadow:
+      0 0 0 1px rgba(217,184,255,0.6),
+      0 0 60px rgba(155,93,229,0.35),
+      0 25px 60px rgba(0,0,0,0.5);
+    transform:scale(0.4) translateY(40px);
+    opacity: 0;
+    transition:transform .9s cubic-bezier(.2,.9,.25,1.2), opacity .7s ease;
+  }
+  #carta-wrapper.visible #carta{ transform:scale(1) translateY(0); opacity:1; }
+
+  #carta::before, #carta::after{
+    content:'✦'; position:absolute; font-size:22px; color:var(--rosa-oscuro); opacity:.55;
+  }
+  #carta::before{ top:14px; left:16px; }
+  #carta::after{ bottom:14px; right:16px; }
+
+  .carta-encabezado{
+    text-align:center; font-family:'Great Vibes', cursive;
+    font-size:clamp(24px,4.5vw,32px); color:var(--rosa-oscuro); margin-bottom:14px;
+  }
+  .carta-cuerpo{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(16px,2.6vw,19px);
+    line-height:1.75;
+    color:var(--texto-carta);
+    white-space:pre-line;
+  }
+  .carta-firma{
+    text-align:right; margin-top:22px; font-family:'Great Vibes', cursive;
+    font-size:clamp(22px,4vw,28px); color:var(--vino);
+  }
+
+  #btn-cerrar-carta{
+    position:absolute; top:12px; right:14px;
+    background:none; color:var(--vino); font-size:20px; opacity:.55;
+  }
+  #btn-cerrar-carta:hover{ opacity:1; }
+
+  #btn-sorpresa{
+    position:absolute; top:12px; left:14px;
+    background:rgba(155,93,229,0.12);
+    color:var(--rosa-oscuro);
+    font-size:12px; font-weight:700;
+    padding: 7px 12px; border-radius: 20px;
+    letter-spacing:.3px;
+    transition:background .25s ease, transform .2s ease;
+  }
+  #btn-sorpresa:hover{ background:rgba(155,93,229,0.22); transform:translateY(-1px); }
+
+  #frase-sorpresa{
+    margin-top: 16px; text-align: center; min-height: 20px;
+    font-family:'Great Vibes', cursive; font-size:20px; color:var(--vino);
+    opacity:0; transition:opacity .5s ease;
+  }
+  #frase-sorpresa.mostrar{ opacity:1; }
+
+  .destello{
+    position:absolute; width:4px; height:4px; border-radius:50%;
+    background:var(--dorado); box-shadow:0 0 8px 2px rgba(217,184,255,.9);
+    animation:destello-anim 2.4s ease-in-out infinite;
+  }
+  @keyframes destello-anim{ 0%,100%{opacity:.2;transform:scale(.8);} 50%{opacity:1;transform:scale(1.3);} }
+
+
+  /* ---------- Detalles extra lilas ---------- */
+  .cielo::before, .cielo::after{
+    content:''; position:absolute; border-radius:50%; filter:blur(60px); pointer-events:none;
+  }
+  .cielo::before{
+    width:60vmax; height:60vmax; left:-20vmax; top:-20vmax;
+    background:radial-gradient(circle, rgba(155,93,229,0.38), transparent 65%);
+    animation:aurora1 16s ease-in-out infinite alternate;
+  }
+  .cielo::after{
+    width:55vmax; height:55vmax; right:-20vmax; bottom:-20vmax;
+    background:radial-gradient(circle, rgba(200,150,255,0.28), transparent 65%);
+    animation:aurora2 19s ease-in-out infinite alternate;
+  }
+  @keyframes aurora1{ from{transform:translate(0,0) scale(1);} to{transform:translate(18vw,14vh) scale(1.25);} }
+  @keyframes aurora2{ from{transform:translate(0,0) scale(1);} to{transform:translate(-16vw,-12vh) scale(1.2);} }
+
+  .estrella-fugaz{
+    position:absolute; width:110px; height:2px; border-radius:2px;
+    background:linear-gradient(90deg, rgba(255,255,255,0), #fff);
+    box-shadow:0 0 10px 2px rgba(200,160,255,0.8);
+    transform:rotate(35deg); opacity:0;
+    animation:fugaz 1.3s ease-out forwards;
+  }
+  @keyframes fugaz{
+    0%{ opacity:0; transform:translate(0,0) rotate(35deg); }
+    15%{ opacity:1; }
+    100%{ opacity:0; transform:translate(320px,224px) rotate(35deg); }
+  }
+
+  .mariposa{
+    position:absolute; left:-60px; font-size:26px; opacity:.85;
+    filter:drop-shadow(0 0 8px rgba(190,140,255,0.7));
+    animation:volar linear forwards;
+  }
+  @keyframes volar{
+    0%{ transform:translate(0,0) rotate(8deg); }
+    25%{ transform:translate(30vw,-8vh) rotate(-10deg); }
+    50%{ transform:translate(60vw,6vh) rotate(10deg); }
+    75%{ transform:translate(90vw,-6vh) rotate(-8deg); }
+    100%{ transform:translate(125vw,0) rotate(8deg); }
+  }
+
+  .rastro{
+    position:fixed; z-index:30; pointer-events:none; font-size:14px;
+    transform:translate(-50%,-50%);
+    animation:rastro-anim 0.9s ease-out forwards;
+  }
+  @keyframes rastro-anim{
+    0%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+    100%{ opacity:0; transform:translate(-50%,calc(-50% + 28px)) scale(.3); }
+  }
+
+  #escena-carta::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(circle at 20% 80%, rgba(155,93,229,0.25), transparent 45%),
+               radial-gradient(circle at 85% 20%, rgba(200,150,255,0.2), transparent 45%);
+    animation:respirar 8s ease-in-out infinite alternate;
+  }
+  @keyframes respirar{ from{opacity:.5;} to{opacity:1;} }
+
+  #carta{ border:1px solid rgba(155,93,229,0.25); }
+
+
+  /* ---------- Decoración alrededor de la carta ---------- */
+  #carta-decoracion{
+    position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0;
+  }
+  #carta-decoracion::before{
+    content:''; position:absolute; left:50%; top:50%;
+    width:min(900px,140vw); height:min(900px,140vw);
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(170,110,255,0.35), rgba(120,60,200,0.12) 45%, transparent 70%);
+    animation:halo 6s ease-in-out infinite alternate;
+  }
+  @keyframes halo{
+    from{ transform:translate(-50%,-50%) scale(.9); opacity:.6; }
+    to{ transform:translate(-50%,-50%) scale(1.1); opacity:1; }
+  }
+  .deco{
+    position:absolute; line-height:1;
+    filter:drop-shadow(0 0 10px rgba(190,140,255,0.75));
+    opacity:0;
+    animation:deco-entrar .9s ease-out forwards, deco-flotar var(--d,6s) ease-in-out .9s infinite alternate;
+    animation-delay:var(--delay,0s), calc(var(--delay,0s) + .9s);
+  }
+  @keyframes deco-entrar{
+    from{ opacity:0; transform:scale(.2) rotate(-30deg); }
+    to{ opacity:var(--op,.9); transform:scale(1) rotate(var(--r,0deg)); }
+  }
+  @keyframes deco-flotar{
+    from{ opacity:var(--op,.9); transform:translateY(0) rotate(var(--r,0deg)) scale(1); }
+    to{ opacity:var(--op,.9); transform:translateY(-16px) rotate(calc(var(--r,0deg) + 10deg)) scale(1.08); }
+  }
+  .petalo{
+    position:absolute; top:-40px;
+    animation:petalo-caer linear forwards;
+    filter:drop-shadow(0 0 6px rgba(190,140,255,0.6));
+  }
+  @keyframes petalo-caer{
+    0%{ transform:translate(0,0) rotate(0deg); opacity:0; }
+    10%{ opacity:.9; }
+    90%{ opacity:.7; }
+    100%{ transform:translate(var(--dx,40px),110vh) rotate(var(--giro,360deg)); opacity:0; }
+  }
+  #carta{ z-index:1; }
+
+
+  /* ---------- Más movimiento ---------- */
+  #carta-wrapper.visible #carta{ animation:carta-flotar 6s ease-in-out 1.2s infinite alternate; }
+  @keyframes carta-flotar{ from{ translate:0 0; } to{ translate:0 -10px; } }
+
+  .linea{ opacity:0; animation:linea-subir .9s ease-out forwards; }
+  @keyframes linea-subir{
+    from{ opacity:0; transform:translateY(14px); filter:blur(4px); }
+    to{ opacity:1; transform:translateY(0); filter:blur(0); }
+  }
+  .carta-firma{ white-space:pre-line; }
+
+  .carta-encabezado{
+    background:linear-gradient(90deg,#9b5de5,#c79bff,#7b3fc4,#b57bff,#9b5de5);
+    background-size:250% 100%;
+    -webkit-background-clip:text; background-clip:text;
+    color:transparent; -webkit-text-fill-color:transparent;
+    animation:brillo-titulo 6s linear infinite;
+  }
+
+  #sobre{ animation:sobre-bambolear 4s ease-in-out infinite alternate; }
+  #sobre.abierto{ animation:none; }
+  @keyframes sobre-bambolear{
+    from{ translate:0 0; rotate:-2deg; }
+    to{ translate:0 -12px; rotate:2deg; }
+  }
+  .sobre-sello{ animation:latir-sello 1.4s ease-in-out infinite; }
+  @keyframes latir-sello{
+    0%,100%{ transform:translate(-50%,-50%) scale(1); }
+    50%{ transform:translate(-50%,-50%) scale(1.25); }
+  }
+
+  .titulo-secreto{
+    animation:brillo-titulo 6s linear infinite, mecer-titulo 4s ease-in-out infinite alternate;
+  }
+  @keyframes mecer-titulo{ from{ translate:0 -3px; rotate:-1deg; } to{ translate:0 4px; rotate:1deg; } }
+
+  #btn-sorpresa{ animation:pulso-boton 2.2s ease-in-out infinite; }
+  @keyframes pulso-boton{
+    0%,100%{ box-shadow:0 0 0 0 rgba(155,93,229,0.45); }
+    50%{ box-shadow:0 0 0 9px rgba(155,93,229,0); }
+  }
+  #frase-sorpresa.mostrar{ animation:pop-frase .7s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes pop-frase{
+    from{ transform:scale(.6) translateY(10px); }
+    to{ transform:scale(1) translateY(0); }
+  }
+
+  .orbita{
+    position:absolute; left:50%; top:50%; width:0; height:0;
+    --R:min(44vw,360px);
+    animation:girar 60s linear infinite;
+  }
+  @keyframes girar{ to{ transform:rotate(360deg); } }
+  .orb-item{
+    position:absolute; left:0; top:0; font-size:22px; line-height:1;
+    transform:rotate(calc(var(--i) * 45deg)) translateY(calc(var(--R) * -1));
+    filter:drop-shadow(0 0 8px rgba(200,150,255,0.9));
+    animation:titilar 2.4s ease-in-out infinite alternate;
+    animation-delay:calc(var(--i) * 0.3s);
+  }
+  @keyframes titilar{ from{ opacity:.35; } to{ opacity:1; } }
+
+  #carta::-webkit-scrollbar{ width:6px; }
+  #carta::-webkit-scrollbar-thumb{ background:rgba(155,93,229,0.35); border-radius:10px; }
+
+  @media (max-width:480px){
+    #carta{ padding:26px 18px; }
+    .carta-cuerpo{ font-size:15px; }
+    #sobre{ width:78vw; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="pantalla-password">
+  <div class="cielo" id="cielo"></div>
+
+  <div class="contenido-password">
+    <div id="corazon-central">💜</div>
+    <div class="titulo-secreto">Mi corazón guarda un secreto</div>
+    <div class="subtitulo-secreto">Introduzca la contraseña para abrirlo...</div>
+
+    <div class="fila-password">
+      <input type="text" id="input-password" placeholder="Contraseña" autocomplete="on">
+    </div>
+    <button id="btn-abrir-corazon">Abrir mi corazón 💌</button>
+    <div id="mensaje-error">Mmm... esa no es la contraseña de mi corazón 💜</div>
+  </div>
+</div>
+
+<div id="escena-carta">
+  <div id="lluvia-contenedor"></div>
+
+  <div id="sobre">
+    <div class="sobre-cuerpo">
+      <div class="sobre-etiqueta">Para ti</div>
+    </div>
+    <div class="sobre-solapa"></div>
+    <div class="sobre-sello">💜</div>
+    <div id="texto-clic-sobre">💌 Abrir carta</div>
+  </div>
+</div>
+
+<div id="carta-wrapper">
+  <div id="carta-decoracion"></div>
+  <div id="carta">
+    <button id="btn-cerrar-carta" title="Cerrar">✕</button>
+    <button id="btn-sorpresa">💜 Mi niña</button>
+
+    <div class="carta-encabezado">Para la persona que mas amo en el mundo... 💜</div>
+    <div class="carta-cuerpo" id="texto-carta"></div>
+    <div class="carta-firma" id="firma-carta"></div>
+    <div id="frase-sorpresa"></div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ZONA DE CONFIGURACIÓN — modifica aquí todo lo personal
+================================================================ */
+
+const PASSWORD = "PRINCESA";
+
+const NOMBRE_REMITENTE = "Junior";
+
+const TEXTO_CARTA =
+`Si estás leyendo esto, significa que encontraste la llave de mi corazón.
+
+Soy consciente del error que cometi y el daño que te logre causar, y me duele mucho al saber que te lastimè cuando te mereces lo mejor del mundo.
+
+Se que es algo que no puedo deshacer aunque quisiera, se que pedir perdòn no arreglara nada por si solo y verdad quiero que sepa que no hay un momento en que que no me coloque a pensar en lo que hice, de como te sentiste y en todo lo que pude haber hecho diferente.
+
+Yo quiero cambiar porque realmente me importas mucho, entiendo la magnitud de la situacion pero quiero ser mucho mejor, yo quisiera que vieras ese cambio en mi, no con tantas palabras sino con todo lo que estoy dispuesto a hacer.
+
+No te pido que olvides, ni confies de inmediato, solo te pido la oportunidad de demostrarte que puedo ser distinto, que aprendi de mis errores y que estoy dispuesto a reconstruir las cosas.
+
+Te amo muchísimo. 💜`;
+
+const FRASES_SORPRESA = [
+  "Contigo todo se siente más bonito. 💜",
+  "Si pudiera elegir nuevamente, volvería a elegirte. ✨",
+  "Mi lugar favorito siempre será donde estés tú. 💜",
+  "Te amo más de lo que estas palabras pueden explicar. ✨",
+  "No necesito un lugar perfecto, solo estar contigo. 💜"
+];
+
+const TEXTOS_LLUVIA = ["TE AMO 💜", "TE AMO 🦋", "TE AMO 🪻", "TE AMO ✨", "TE AMO 💫", "TE AMO 🌸"];
+
+const CANTIDAD_LLUVIA = 26;
+
+const VELOCIDAD_MIN = 9;
+const VELOCIDAD_MAX = 20;
+
+const FRASES_CLICK = [
+  "Y podría decírtelo un millón de veces... 💜",
+  "Cada vez que lo digo, lo siento más fuerte. 💜",
+  "Nunca me cansaré de decírtelo. ✨"
+];
+
+document.getElementById('firma-carta').textContent = `Con todo mi amor,\n${NOMBRE_REMITENTE}`;
+
+
+function renderCarta(){
+  const cont = document.getElementById('texto-carta');
+  cont.innerHTML = '';
+  let delay = 0.9;
+  TEXTO_CARTA.split('\n').forEach(l=>{
+    const div = document.createElement('div');
+    if(l.trim() === ''){
+      div.style.height = '0.9em';
+    } else {
+      div.className = 'linea';
+      div.textContent = l;
+      div.style.animationDelay = delay + 's';
+      delay += 0.4;
+    }
+    cont.appendChild(div);
+  });
+  const firma = document.getElementById('firma-carta');
+  firma.classList.remove('linea');
+  void firma.offsetWidth;
+  firma.classList.add('linea');
+  firma.style.animationDelay = (delay + 0.3) + 's';
+}
+
+const cielo = document.getElementById('cielo');
+
+function crearEstrellas(cantidad){
+  for(let i=0;i<cantidad;i++){
+    const e = document.createElement('div');
+    e.className = 'estrella';
+    e.style.left = Math.random()*100 + 'vw';
+    e.style.top = Math.random()*100 + 'vh';
+    e.style.animationDelay = (Math.random()*3) + 's';
+    cielo.appendChild(e);
+  }
+}
+crearEstrellas(45);
+
+const emojisFlotantes = ['💜','🦋','🪻','✨','💫','🌸','💜','🔮'];
+function crearCorazonFlotante(){
+  const c = document.createElement('div');
+  c.className = 'corazon-flotante';
+  c.textContent = emojisFlotantes[Math.floor(Math.random()*emojisFlotantes.length)];
+  c.style.left = Math.random()*100 + 'vw';
+  const duracion = 8 + Math.random()*10;
+  c.style.animationDuration = duracion + 's';
+  c.style.setProperty('--drift', (Math.random()*140-70) + 'px');
+  c.style.fontSize = (16 + Math.random()*18) + 'px';
+  cielo.appendChild(c);
+  setTimeout(()=> c.remove(), duracion*1000 + 200);
+}
+setInterval(crearCorazonFlotante, 450);
+for(let i=0;i<10;i++) setTimeout(crearCorazonFlotante, i*300);
+
+
+/* ---------- Detalles extra: estrellas fugaces, mariposas, brillos ---------- */
+function crearEstrellaFugaz(){
+  const f = document.createElement('div');
+  f.className = 'estrella-fugaz';
+  f.style.left = (Math.random()*70) + 'vw';
+  f.style.top = (Math.random()*40) + 'vh';
+  cielo.appendChild(f);
+  setTimeout(()=> f.remove(), 1400);
+}
+setInterval(crearEstrellaFugaz, 3500);
+setTimeout(crearEstrellaFugaz, 800);
+
+function crearMariposa(){
+  const m = document.createElement('div');
+  m.className = 'mariposa';
+  m.textContent = '🦋';
+  m.style.top = (10 + Math.random()*70) + 'vh';
+  m.style.fontSize = (20 + Math.random()*16) + 'px';
+  const dur = 14 + Math.random()*8;
+  m.style.animationDuration = dur + 's';
+  cielo.appendChild(m);
+  setTimeout(()=> m.remove(), dur*1000 + 200);
+}
+setInterval(crearMariposa, 6000);
+setTimeout(crearMariposa, 1500);
+
+const simbolosRastro = ['✨','💜','🦋','✦','🪻'];
+let ultimoRastro = 0;
+function dejarRastro(e){
+  const ahora = Date.now();
+  if(ahora - ultimoRastro < 60) return;
+  ultimoRastro = ahora;
+  const r = document.createElement('div');
+  r.className = 'rastro';
+  r.textContent = simbolosRastro[Math.floor(Math.random()*simbolosRastro.length)];
+  r.style.left = e.clientX + 'px';
+  r.style.top = e.clientY + 'px';
+  r.style.fontSize = (10 + Math.random()*10) + 'px';
+  document.body.appendChild(r);
+  setTimeout(()=> r.remove(), 950);
+}
+document.addEventListener('pointermove', dejarRastro);
+
+function crearDestellosCarta(){
+  const carta = document.getElementById('carta');
+  carta.querySelectorAll('.destello').forEach(d => d.remove());
+  for(let i=0;i<14;i++){
+    const d = document.createElement('div');
+    d.className = 'destello';
+    d.style.left = Math.random()*96 + '%';
+    d.style.top = Math.random()*96 + '%';
+    d.style.animationDelay = (Math.random()*2.4) + 's';
+    carta.appendChild(d);
+  }
+}
+
+
+/* ---------- Decoración alrededor de la carta ---------- */
+const contenedorDeco = document.getElementById('carta-decoracion');
+let intervaloPetalos = null;
+
+function crearDeco(emoji, izq, arriba, tam, rot, dur, delay, op){
+  const d = document.createElement('div');
+  d.className = 'deco';
+  d.textContent = emoji;
+  d.style.left = izq + '%';
+  d.style.top = arriba + '%';
+  d.style.fontSize = tam + 'px';
+  d.style.setProperty('--r', rot + 'deg');
+  d.style.setProperty('--d', dur + 's');
+  d.style.setProperty('--delay', delay + 's');
+  d.style.setProperty('--op', op);
+  contenedorDeco.appendChild(d);
+}
+
+function crearPetalo(){
+  const p = document.createElement('div');
+  p.className = 'petalo';
+  p.textContent = ['🌸','🪻','💜','✨','🦋'][Math.floor(Math.random()*5)];
+  p.style.left = Math.random()*100 + '%';
+  p.style.fontSize = (12 + Math.random()*16) + 'px';
+  p.style.setProperty('--dx', (Math.random()*160-80) + 'px');
+  p.style.setProperty('--giro', (Math.random()*540-270) + 'deg');
+  const dur = 7 + Math.random()*6;
+  p.style.animationDuration = dur + 's';
+  contenedorDeco.appendChild(p);
+  setTimeout(()=> p.remove(), dur*1000 + 200);
+}
+
+function crearDecoracionCarta(){
+  contenedorDeco.innerHTML = '';
+  clearInterval(intervaloPetalos);
+  const movil = window.innerWidth < 600;
+  const g = movil ? 0.65 : 1;
+
+  // Esquinas grandes
+  crearDeco('🪻',  1,  2, 84*g, -15, 6.5, 0.0, 0.95);
+  crearDeco('🦋', 86,  3, 70*g,  12, 5.5, 0.2, 0.95);
+  crearDeco('🌸',  2, 82, 76*g,  10, 7.0, 0.4, 0.95);
+  crearDeco('🪻', 86, 80, 84*g,  18, 6.0, 0.6, 0.95);
+
+  // Bordes superior e inferior
+  const arribaAbajo = ['✨','💜','🦋','🌸','💫','🪻'];
+  for(let i=0;i<7;i++){
+    const arriba = i % 2 === 0;
+    crearDeco(arribaAbajo[i % arribaAbajo.length],
+      8 + i*13 + Math.random()*4,
+      arriba ? 1 + Math.random()*4 : 90 + Math.random()*4,
+      (22 + Math.random()*20)*g, Math.random()*40-20,
+      4 + Math.random()*4, 0.8 + i*0.12, 0.85);
+  }
+
+  // Laterales (a los costados de la carta)
+  const lateral = ['💜','🌸','✨','🦋','🪻','💫'];
+  for(let i=0;i<10;i++){
+    const izquierda = i % 2 === 0;
+    crearDeco(lateral[i % lateral.length],
+      izquierda ? 1 + Math.random()*7 : 90 + Math.random()*7,
+      12 + (i>>1)*17 + Math.random()*5,
+      (20 + Math.random()*24)*g, Math.random()*50-25,
+      4 + Math.random()*4, 1 + i*0.1, 0.8);
+  }
+
+  // Órbita de brillos girando alrededor de la carta
+  const orbita = document.createElement('div');
+  orbita.className = 'orbita';
+  const simbOrb = ['✨','💜','🦋','💫','🌸','✨','🪻','💫'];
+  simbOrb.forEach((e,i)=>{
+    const o = document.createElement('span');
+    o.className = 'orb-item';
+    o.textContent = e;
+    o.style.setProperty('--i', i);
+    orbita.appendChild(o);
+  });
+  contenedorDeco.appendChild(orbita);
+
+  // Pétalos cayendo
+  for(let i=0;i<6;i++) setTimeout(crearPetalo, i*250);
+  intervaloPetalos = setInterval(crearPetalo, 650);
+}
+
+function limpiarDecoracionCarta(){
+  clearInterval(intervaloPetalos);
+  intervaloPetalos = null;
+  contenedorDeco.innerHTML = '';
+}
+
+const pantallaPassword = document.getElementById('pantalla-password');
+const inputPassword = document.getElementById('input-password');
+const btnAbrirCorazon = document.getElementById('btn-abrir-corazon');
+const corazonCentral = document.getElementById('corazon-central');
+const mensajeError = document.getElementById('mensaje-error');
+const escenaCarta = document.getElementById('escena-carta');
+
+function normalizar(str){
+  return str.trim().toUpperCase();
+}
+
+function explosionDeCorazones(origenX, origenY){
+  const emojis = ['💜','🦋','🪻','✨','💫','🌸'];
+  for(let i=0;i<24;i++){
+    const h = document.createElement('div');
+    h.className = 'explosion-corazon';
+    h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    h.style.left = origenX + 'px';
+    h.style.top = origenY + 'px';
+    const angulo = Math.random()*Math.PI*2;
+    const distancia = 80 + Math.random()*160;
+    h.style.setProperty('--ex', Math.cos(angulo)*distancia + 'px');
+    h.style.setProperty('--ey', Math.sin(angulo)*distancia + 'px');
+    h.style.fontSize = (14 + Math.random()*14) + 'px';
+    document.body.appendChild(h);
+    setTimeout(()=> h.remove(), 1200);
+  }
+}
+
+function intentarContrasena(){
+  const valor = normalizar(inputPassword.value);
+  if(valor === normalizar(PASSWORD)){
+    corazonCentral.classList.add('aceptado');
+    const rect = corazonCentral.getBoundingClientRect();
+    explosionDeCorazones(rect.left + rect.width/2, rect.top + rect.height/2);
+    btnAbrirCorazon.disabled = true;
+    setTimeout(()=>{
+      pantallaPassword.classList.add('desvanecer');
+      setTimeout(()=>{
+        pantallaPassword.style.display = 'none';
+        mostrarEscenaCarta();
+      }, 1000);
+    }, 900);
+  } else {
+    corazonCentral.classList.remove('temblando');
+    void corazonCentral.offsetWidth;
+    corazonCentral.classList.add('temblando');
+    mensajeError.classList.add('mostrar');
+    inputPassword.value = '';
+    inputPassword.focus();
+  }
+}
+
+btnAbrirCorazon.addEventListener('click', intentarContrasena);
+inputPassword.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') intentarContrasena();
+});
+
+const lluviaContenedor = document.getElementById('lluvia-contenedor');
+const sobre = document.getElementById('sobre');
+const cartaWrapper = document.getElementById('carta-wrapper');
+
+function crearItemLluvia(){
+  const item = document.createElement('div');
+  item.className = 'te-amo-item';
+  item.textContent = TEXTOS_LLUVIA[Math.floor(Math.random()*TEXTOS_LLUVIA.length)];
+
+  const tamano = 14 + Math.random()*26;
+  const esFondo = Math.random() < 0.4;
+  item.style.fontSize = tamano + 'px';
+  item.style.left = Math.random()*96 + 'vw';
+  item.style.opacity = esFondo ? (0.15 + Math.random()*0.2) : (0.45 + Math.random()*0.4);
+  if(esFondo) item.style.filter = 'blur(2px)';
+  item.style.setProperty('--rot', (Math.random()*30-15) + 'deg');
+  item.style.setProperty('--drift', (Math.random()*160-80) + 'px');
+
+  const duracion = VELOCIDAD_MIN + Math.random()*(VELOCIDAD_MAX-VELOCIDAD_MIN);
+  item.style.animationDuration = duracion + 's';
+  item.style.animationDelay = (-Math.random()*duracion) + 's';
+
+  item.addEventListener('click', (e)=> interactuarConTeAmo(item, e));
+  lluviaContenedor.appendChild(item);
+}
+
+function poblarLluvia(){
+  lluviaContenedor.innerHTML = '';
+  for(let i=0;i<CANTIDAD_LLUVIA;i++) crearItemLluvia();
+}
+
+function interactuarConTeAmo(item, evento){
+  if(item.classList.contains('congelado')) return;
+  item.classList.add('congelado');
+
+  const rect = item.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+
+  item.classList.add('creciendo');
+
+  const variantes = ['TE AMO 💜','TE AMO 🦋','TE AMO 🪻','TE AMO ✨','TE AMO 💫','TE AMO 🌸'];
+  variantes.forEach((texto, i)=>{
+    setTimeout(()=>{
+      const mini = document.createElement('div');
+      mini.className = 'mini-te-amo';
+      mini.textContent = texto;
+      mini.style.left = cx + 'px';
+      mini.style.top = cy + 'px';
+      const angulo = (Math.PI*2 / variantes.length) * i + (Math.random()*0.4-0.2);
+      const distancia = 55 + Math.random()*45;
+      mini.style.setProperty('--mx', Math.cos(angulo)*distancia + 'px');
+      mini.style.setProperty('--my', Math.sin(angulo)*distancia + 'px');
+      document.body.appendChild(mini);
+      setTimeout(()=> mini.remove(), 1900);
+    }, i*70);
+  });
+
+  const frase = document.createElement('div');
+  frase.className = 'frase-flotante-click';
+  frase.textContent = FRASES_CLICK[Math.floor(Math.random()*FRASES_CLICK.length)];
+  frase.style.left = cx + 'px';
+  frase.style.top = cy + 'px';
+  document.body.appendChild(frase);
+  setTimeout(()=> frase.remove(), 2700);
+
+  setTimeout(()=>{
+    item.remove();
+    crearItemLluvia();
+  }, 750);
+}
+
+function mostrarEscenaCarta(){
+  escenaCarta.classList.add('visible');
+  poblarLluvia();
+}
+
+sobre.addEventListener('click', abrirSobre);
+function abrirSobre(){
+  if(sobre.classList.contains('abierto')) return;
+  sobre.classList.add('abierto');
+  setTimeout(()=>{
+    renderCarta();
+    crearDestellosCarta();
+    crearDecoracionCarta();
+    cartaWrapper.classList.add('visible');
+  }, 550);
+}
+
+const btnSorpresa = document.getElementById('btn-sorpresa');
+const fraseSorpresa = document.getElementById('frase-sorpresa');
+let ultimaFraseIndex = -1;
+
+btnSorpresa.addEventListener('click', ()=>{
+  let idx;
+  do{ idx = Math.floor(Math.random()*FRASES_SORPRESA.length); }
+  while(idx === ultimaFraseIndex && FRASES_SORPRESA.length > 1);
+  ultimaFraseIndex = idx;
+  const rb = btnSorpresa.getBoundingClientRect();
+  explosionDeCorazones(rb.left + rb.width/2, rb.top + rb.height/2);
+
+  fraseSorpresa.classList.remove('mostrar');
+  setTimeout(()=>{
+    fraseSorpresa.textContent = FRASES_SORPRESA[idx];
+    fraseSorpresa.classList.add('mostrar');
+  }, 150);
+});
+
+document.getElementById('btn-cerrar-carta').addEventListener('click', ()=>{
+  reiniciarExperiencia();
+});
+
+function reiniciarExperiencia(){
+  cartaWrapper.classList.remove('visible');
+  limpiarDecoracionCarta();
+
+  escenaCarta.classList.remove('visible');
+  sobre.classList.remove('abierto');
+  lluviaContenedor.innerHTML = '';
+
+  fraseSorpresa.classList.remove('mostrar');
+  fraseSorpresa.textContent = '';
+
+  corazonCentral.classList.remove('aceptado', 'temblando');
+  mensajeError.classList.remove('mostrar');
+  inputPassword.value = '';
+  btnAbrirCorazon.disabled = false;
+
+  pantallaPassword.style.display = 'flex';
+  void pantallaPassword.offsetWidth;
+  pantallaPassword.classList.remove('desvanecer');
+}
+
+</script>
+</body>
+</html>
